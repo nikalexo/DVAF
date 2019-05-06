@@ -37,8 +37,11 @@ class Plotter:
                     num_udef[j//12] += self.pkg_with_cvss[i][j][3]
                     total[j//12] += self.pkg_with_cvss[i][j][3] + self.pkg_with_cvss[i][j][2] + self.pkg_with_cvss[i][j][1] + self.pkg_with_cvss[i][j][0]
                 except IndexError:
-                    print(j//12)
-                    raise IndexError('List index out of bounds')
+                    xx = j//12
+                    if xx==19:
+                        continue
+                    else:
+                        raise IndexError('List index out of bounds')
         ## Generate percentage
         for i in range(self.years + 1):
             try:
