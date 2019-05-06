@@ -1,0 +1,7 @@
+[DIR]
+cache_dir = vendors/debian/cache/
+dists_dir = mirror/dists/
+arch = amd64
+
+[LOG]
+loglevel = 4

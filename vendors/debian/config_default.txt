@@ -1,0 +1,21 @@
+[LOG]
+loglevel = 4
+
+[URL]
+dsa_base_url = http://www.debian.org/security/
+pkg_base_url = https://freeside.trust.cased.de/apt-sec/mirror
+
+[DIR]
+cache_dir = cache/
+dists_dir = mirror/dists/
+arch = amd64
+
+[DSA]
+first_dsa = 11
+first_usn = 1
+first_fsa = 1
+blacklist = DSA-1975, DSA-2360, DSA-2134, DSA-3043, DSA-3156, DSA-4342
+
+
+[TRUST]
+lambda = 36
