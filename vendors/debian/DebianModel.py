@@ -11,7 +11,6 @@ from .DebianAdvisory import DebianAdvisory
 from .CVEParse import CVEParse
 from ..VendorModel import VendorModel
 from .CSVReader import CSVReader
-from .Tests import Tests
 from fixcwes import ret_roots
 
 class DebianModel(VendorModel):
@@ -474,7 +473,8 @@ class DebianModel(VendorModel):
     def performTests(self):
         #Tests.system_input_prediction_error_test(self)
         #Tests.random_input_prediction_error_test(self)
-        Tests.relativity_of_expectations_test(self)
+        #Tests.relativity_of_expectations_test(self)
+        return 0
 
     def load_latest_prediction_model(self):
         return CSVReader.read_csv_prediction_errorcompl(os.path.join(self.module_path, 'models', 'latest_model.csv'), self, 9)

@@ -1,6 +1,4 @@
 import csv
-from CertainTrust import Opinion
-
 
 class CSVReader:
     gathered_predictions = dict()
@@ -17,24 +15,7 @@ class CSVReader:
         :param months: number of months
         :return: dictionary of package-names as key and opinions as value
         '''
-        result = {}
-        with open(inputfile, newline="") as csvfile:
-            reader = csv.reader(csvfile, delimiter=':')
-
-            for row in reader:
-                if not len(row) == 0:
-                    package = vendormodel.unifySrcName(row [0])
-                    prediction = float(row [1])
-                    CSVReader.gathered_predictions[package]=prediction
-                    errorCompl = float(row [2])
-                    resT = 1 - prediction / (30 * months * norm_param)
-                    if len(row)==4:
-                        oldf = float(row[3])
-                        newf = 1 + ( (oldf - 1) / (norm_param / 4 ))
-                        result[package]=Opinion(resT, errorCompl, newf)
-                    else:
-                        result[package] = Opinion(resT, errorCompl, f)
-        return result
+        return 0
 
     @staticmethod
     def read_csv_opinons(months):
@@ -45,13 +26,7 @@ class CSVReader:
         :param months: number of months
         :return: dictionary of package-names as key and opinions as value
         '''
-        result = {}
-        with open("vendors/debian/models/dummy_model_"+str(months)+".csv", newline="") as csvfile:
-            reader = csv.reader(csvfile, delimiter=':', quotechar='|')
-            for row in reader:
-                if not len(row) == 0:
-                    result[row[0]]=Opinion(float(row[1]),float(row[2]),float(row[3]))
-        return result
+        return 0
 
     @staticmethod
     def read_csv_package_names(filename):
@@ -77,5 +52,3 @@ for key in res:
 CSVReader.read_csv_package_names("inputs/dummy_input_package.csv")
 '''
 # /home/keks/mstar/mstar-project/vendors/debian/inputs/dummy_input_package_prediction_errorcompl.csv
-
-
