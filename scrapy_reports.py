@@ -1,10 +1,11 @@
 import scrapy
 import json
+from html2json import collect
 
 class ReportsSpider(scrapy.Spider):
    name = "reports"
    urls = [
-      'https://hackerone.com/hacktivity?sort_type=latest_disclosable_activity_at&filter=type:all&page=1'
+      'http://h1.nobbd.de/index.php?start=0'
    ]
    headers = {
       'x-requested-with': 'XMLHttpRequest',
@@ -20,11 +21,12 @@ class ReportsSpider(scrapy.Spider):
          yield scrapy.Request(url=url, callback=self.parse, headers=self.headers, meta=self.meta)
 
    def parse(self, response):
-      reports = json.loads(response.text)
+      print(response.text)
+      reports = json.loads(collect(response.text))
       yield {
-            'reports_page_' + str(response.meta['page']) : reports['reports']
+            'reports_page_' + str(response.meta['start']) : reports['start']
       }
 
-      if 'page' in response.meta and response.meta['page'] < int(reports['pages']):
-         next_page = response.meta['page']+1
-         yield response.follow(response.url.replace('page=' + str(response.meta['page']), 'page=' + str(next_page)), callback=self.parse, meta={'page': next_page}, headers=self.headers)
+      if 'start' in response.meta and response.meta['start'] < int(reports['start']):
+         next_page = response.meta['start']+20
+         yield response.follow(response.url.replace('start=' + str(response.meta['start']), 'start=' + str(next_page)), callback=self.parse, meta={'start': next_page}, headers=self.headers)

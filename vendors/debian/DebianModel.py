@@ -117,6 +117,7 @@ class DebianModel(VendorModel):
 
     def store_dbs(self):
         self.store_db_single('dsatable', self.dsatable)
+        self.store_db_single('dsastats', self.dsatable)
         self.store_db_single('src2dsa', self.src2dsa)
         self.store_db_single('dsa2cve', self.dsa2cve)
         self.store_db_single('cvetable', self.cvetable)
@@ -191,6 +192,7 @@ class DebianModel(VendorModel):
         logging.info('Updating vulnerability database with advisory ' + self.state['vendor'] + str(myid) + ' \n')
 
         adv = self.dsatable[myid]
+        self.dsastats=dsastats
         dsastats = DebianAdvisory.parseDSAhtml(adv)
 
         dsastats = DebianAdvisory.fixDSAquirks(myid, dsastats)

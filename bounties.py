@@ -7,7 +7,6 @@ import paper_plots as carlosplt
 from scipy.stats import shapiro
 from scipy.stats import ks_2samp
 import seaborn as sns
-import powerlaw
 import statsmodels.api as sm
 from statistics import median
 
@@ -146,7 +145,7 @@ def plot_bounties(ff):
     x = range(len(quarter_sum[-4*5:]))
     width = 1/2
 
-    #plt.bar(x[-4*5:], quarter_sum[-4*5:], width, color='brown', label='regular support', edgecolor='black')
+    #plt.bar(x[-4*5:], quarter_sum[-4*5:], width, color='brown', label='Number', edgecolor='black')
     
     #plt.xticks(np.arange(0,n),quartersx[-4*5:], rotation="vertical")
     #plt.ylabel('Number of rewards')
@@ -156,11 +155,11 @@ def plot_bounties(ff):
     #
     #plt.bar(x[-4*5:], quarter_av[-4*5:], width, color='darkblue', label='regular support', edgecolor='black')
    # 
-   # plt.xticks(np.arange(0,n),quartersx[-4*5:], rotation="vertical")
-   # plt.ylabel('Average bug price of IBB projects (USD)')
-   # plt.xlabel('Quarter')
-   # carlosplt.post_paper_plot(True,True,True)
-   # plt.show()
+    #plt.xticks(np.arange(0,n),quartersx[-4*5:], rotation="vertical")
+    #plt.ylabel('Average bug price of IBB projects (USD)')
+    #plt.xlabel('Quarter')
+    #carlosplt.post_paper_plot(True,True,True)
+    #plt.show()
 
     #print(quarter2bountylist)
     if ff==0:
@@ -213,28 +212,6 @@ def plot_bounties(ff):
             #print('lognormal mu: ',results.lognormal.mu)
             #print('lognormal sigma: ',results.lognormal.sigma)
 
-            #fig = results.plot_ccdf(color = 'darkblue', linestyle='-', label='data')
-            #results.power_law.plot_ccdf(color = 'darkgreen', ax=fig, label='power-law fit')
-            #results.truncated_power_law.plot_ccdf(color = 'red', ax=fig)
-            #results.lognormal_positive.plot_ccdf(color = 'yellow', ax=fig)
-            #results.lognormal.plot_ccdf(color = 'brown', ax=fig)
-            #results.exponential.plot_ccdf(color = 'orange', ax=fig)
-            #plt.ylabel('ccdf')
-            #plt.xlabel('Vulnerabilities')
-            #fig.legend()
-            #carlosplt.post_paper_plot(True,True,True)
-            #plt.show()
-            #R, p=results.distribution_compare('power_law','exponential')
-            #print('Exponential: ',R,p)
-            #R, p=results.distribution_compare('power_law','stretched_exponential')
-            #print('Stretched exponential: ',R,p)
-            #R, p=results.distribution_compare('power_law','truncated_power_law')
-            #print('Power law truncated: ',R,p)
-            #R, p=results.distribution_compare('power_law','lognormal_positive')
-            #print('Lognormal positive: ',R,p)
-            #R, p=results.distribution_compare('power_law','lognormal')
-            #print('Lognormal: ',R,p)
-
     ## Linear regression of average and median
     # Average
     xx = []
@@ -286,12 +263,147 @@ def plot_bounties(ff):
     plt.xlabel('Quarter')
     carlosplt.post_paper_plot(True,True,True)
 
+
+def plot_demographics(ff):
+    if ff==0:
+        labeltext = 'num - IBB'
+    elif ff==1:
+        labeltext = 'new - IBB'
+    elif ff==2:
+        labeltext = 'num - All'
+    elif ff==3:
+        labeltext = 'new - All'
+    reports_team = dict()
+    sum_team = dict()
+    with open("reports_team.json", "r") as fp:
+        reports_team = json.load(fp)
+
+    with open("sum_team.json", "r") as fp:
+        sum_team = json.load(fp)
+
+    if ff < 2:
+        ibb_list = ['ibb-php', 'ibb-python', 'ibb-data', 'ibb-flash', 'ibb-nginx', 'ibb-perl', 'internet', 'ibb-openssl', 'ibb-apache']
+        print('list follows')
+        for j in ibb_list:
+            print(reports_team[j])
+    else:
+        ibb_list = [team for team in reports_team]
+    
+    most_team = dict()
+    sum_bounty_team = dict()
+    for team in ibb_list:
+        old = 0.0
+        old_sum = 0.0
+        for report in reports_team[team]:
+            try:
+                new = float(report['total_awarded_bounty_amount'])
+                old_sum += new
+            except KeyError:
+                print('#'*80)
+                print(report)
+                print('Report id ', report['id'], ' - bounty not found')
+                continue
+            if new > old:
+                old = new
+        most_team[team] = old
+        sum_bounty_team[team] = old_sum
+
+    print(most_team)
+    print(sum_bounty_team)
+
+    month2sum = []
+    month2money = []
+    month2bountylist = []
+    month2newreporters = []
+    repuntilnow = []
+
+    #Years: 2001-2018
+    for i in range(12*18):
+        month2sum.append(0)
+        month2newreporters.append(0)
+        month2money.append(0.0)
+        month2bountylist.append([])
+
+    for team in ibb_list:
+        for report in reports_team[team]:
+            datetime_obj = parser.parse(report['latest_disclosable_activity_at'])
+            print(str(datetime_obj))
+            month2sum[(int(datetime_obj.year)-2001)*12 + datetime_obj.month] += 1
+            try:
+                reporter=report['reporter']['id']
+                #if report['severity_rating'] == "high":
+                month2money[(int(datetime_obj.year)-2001)*12 + datetime_obj.month] += float(report['total_awarded_bounty_amount'])
+                month2bountylist[(int(datetime_obj.year)-2001)*12 + datetime_obj.month] += [float(report['total_awarded_bounty_amount'])]
+                if reporter not in repuntilnow:
+                    month2newreporters[(int(datetime_obj.year)-2001)*12 + datetime_obj.month] += 1
+                    repuntilnow.append(reporter)
+            except KeyError:
+                print('Error with report ', report['id'])
+                continue
+
+    print(month2bountylist)
+
+    #plt.plot(month2sum[-12*5:])
+    #plt.show()
+    
+    #plt.plot(month2money[-12*5:])
+    #plt.show()
+
+    years = 18
+    quarter_num = years*4
+    quarter_sum = []
+    quarter_av = []
+    carlosplt.pre_paper_plot()
+
+    quarter2bountylist = []
+    
+    
+    quartersx = []
+    for i in range(1,years+1):
+        for j in range(1,5):
+            if j==1:
+                quartersx.append('Q' + str(j)+'\''+str(i).zfill(2))
+            else:
+                quartersx.append(' ')
+    
+    for j in range(quarter_num):
+        temp2 = sum(month2money[3*j:3*(j+1)])
+        temp4 = sum(month2newreporters[3*j:3*(j+1)])
+        temp3 = [item for sublist in month2bountylist[3*j:3*(j+1)] for item in sublist]
+        temp1 = len(temp3)
+        if ff==1 or ff==3:
+            quarter_sum.append(temp4)
+        else:
+            quarter_sum.append(temp1)
+
+    n = len(quarter_sum[-4*5:])
+    x = range(len(quarter_sum[-4*5:]))
+    width = 1/2
+    #print(quarter2bountylist)
+
+    
+    reference = []
+    for i in quarter2bountylist:
+        reference+=i
+    print(reference)
+
+    ## Create bars plot
+    plt.bar(x[-4*5:], quarter_sum[-4*5:], width, color='darkblue', label='Number', edgecolor='black')
+    
+    plt.xticks(np.arange(0,n),quartersx[-4*5:], rotation="vertical")
+    plt.ylabel(labeltext)
+    plt.xlabel('Quarter')
+    carlosplt.post_paper_plot(True,True,True)
+
+
 if __name__ == "__main__":
-    main()
+    #main()
     fig = plt.figure()
     carlosplt.pre_paper_plot()
     for i in range(4):
         ax = fig.add_subplot(2,2,i+1)
-        plot_bounties(i)
+        #plot_bounties(i)
+        plot_demographics(i)
+
     #plot_bounties(1)
     plt.show()
