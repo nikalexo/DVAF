@@ -68,7 +68,9 @@ class DebianAdvisory:
 
         logging.info('Fetching DSA-%d records\n', dsa_id)
 
-        if dsa_id >= 4078:
+        if dsa_id >= 4362:
+            year = 2019        
+        elif dsa_id >= 4078:
             year = 2018
         elif dsa_id >= 3751:
             year = 2017
