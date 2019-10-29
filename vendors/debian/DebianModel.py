@@ -29,6 +29,7 @@ class DebianModel(VendorModel):
         self.src2dsa = dict()
         self.dsa2cve = dict()
         self.cvetable = dict()
+        self.dsainfo = dict()
         self.src2month = dict()
         self.src2sloccount = dict()
         self.src2pop = dict()
@@ -121,6 +122,7 @@ class DebianModel(VendorModel):
         self.store_db_single('src2dsa', self.src2dsa)
         self.store_db_single('dsa2cve', self.dsa2cve)
         self.store_db_single('cvetable', self.cvetable)
+        self.store_db_single('dsainfo', self.dsainfo)
         self.store_db_single('src2deps', self.src2deps)
         self.store_db_single('src2sloccount', self.src2sloccount)
         self.store_db_single('src2pop', self.src2pop)
@@ -192,7 +194,6 @@ class DebianModel(VendorModel):
         logging.info('Updating vulnerability database with advisory ' + self.state['vendor'] + str(myid) + ' \n')
 
         adv = self.dsatable[myid]
-        self.dsastats=dsastats
         dsastats = DebianAdvisory.parseDSAhtml(adv)
 
         dsastats = DebianAdvisory.fixDSAquirks(myid, dsastats)
@@ -216,6 +217,7 @@ class DebianModel(VendorModel):
             if cvestats[0] > dsastats[1] or cvestats[0] == 0:
                 finaldate = dsastats[1]
 
+            self.dsainfo[myid] = dsastats
             self.cvetable[cve_id] = (finaldate, dsastats[1] - finaldate, cvestats[1], cvestats[2], cvestats[3], cvestats[4])
 
     def load_state(self):
@@ -259,7 +261,7 @@ class DebianModel(VendorModel):
         with_cwe = dict()
         root_list = ['682', '118', '330', '435', '664', '691', '693', '697', '703', '707', '710' ]
 
-        ## To eliminate duplicate cves
+        ## To eliminate duplicate cves within the same cveid
         haveseen = dict()
 
         ## cvestats = (date: number)
@@ -490,8 +492,8 @@ class DebianModel(VendorModel):
         :return: dictionary of opinions
         """
         res = CSVReader.read_csv_prediction_errorcompl(filename, self, month, norm_param=norm_param)
-        # with open('vendors/debian/models/dummy_model_' + str(month) + '.csv', 'w') as file:
-        #    for key in res:
+               #    for key in res:
+ # with open('vendors/debian/models/dummy_model_' + str(month) + '.csv', 'w') as file:
         #        file.write(key + ":" + str(res[key].t) + ":" + str(res[key].c) + ":" + str(res[key].f) + "\n")
         return res
 
@@ -501,11 +503,4 @@ class DebianModel(VendorModel):
         """
         Prints help message to this vendor model.
         """
-        print("Debian mstar model supports only update status and show actions.")
-
-
-
-
-
-
-
+        print("Debian model supports only update status and show actions.")

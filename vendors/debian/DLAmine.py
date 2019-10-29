@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from .DebianAdvisory import DebianAdvisory as da
-from .CVEParse import CVEParse as cveparse
+from DebianAdvisory import DebianAdvisory as da
+from CVEParse import CVEParse as cveparse
 import re
 import datetime
 from html.parser import HTMLParser
@@ -30,7 +30,7 @@ def getDLAs():
     i = 0
     j = 0
 
-    for year in range(2014,2019):
+    for year in range(2014,2020):
         for month in range(1,13):
             totalDLAs[str(year) + ',' + str(month)] = []
             i = 0
@@ -191,4 +191,3 @@ def fixURL(url, pkg):
 
 if __name__== "__main__":
   dlas = getDLAs()
-  #saveDLAs(dlas)

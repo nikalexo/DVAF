@@ -22,11 +22,15 @@ nagios2->nagios
 ^mysql-\d->mysql-transitional
 php->php7
 PHP->php7
+imlib->imlib2
+exim->exim4
+^golang->golang-1.11
 linux-2->linux
 linux-4->linux
 linux-3->linux
 linux-latest->linux
 linux-kernel->linux
+kernel->linux
 kernel-source->linux
 libmusicbrainz->libmusicbrainz
 libgtop1->libgtop2
