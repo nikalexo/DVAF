@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[66]:
+# In[1]:
 
 
-import paper_plots as carlosplt
+#import paper_plots as carlosplt
 from pymongo import MongoClient
 import stat_tests as stats
 import matplotlib.pyplot as plt
@@ -21,7 +21,7 @@ import powerlaw
 import re
 
 
-# In[72]:
+# In[2]:
 
 
 with open('./vendors/debian/cache/src2dsa') as fp:
@@ -182,7 +182,7 @@ for i in range(years + 1):
 h = plt.stackplot(x, [per_low[1:], per_med[1:], per_high[1:], per_udef[1:]], colors = pal, alpha=0.9, labels = labels_cvss)
 plt.xticks(x)
 plt.legend(loc='upper left', handles = h[::-1])
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 print(per_udef)
 plt.show()
 
@@ -191,7 +191,7 @@ plt.show()
 
 
 # Next we filter the vulnerabilities by severity (for use later)
-carlosplt.pre_paper_plot()
+#carlosplt.pre_paper_plot()
 l=0
 m=0
 h=1
@@ -296,7 +296,7 @@ plt.bar(x, year_sum[1:], width, color='darkblue', edgecolor='black')
 plt.xticks(np.arange(0,n),yearsx)
 plt.ylabel('Total vulnerabilities')
 plt.xlabel('Year')
-carlosplt.post_paper_plot(True,True,True)        
+#carlosplt.post_paper_plot(True,True,True)        
 sum_all = sum(values)
 print("Total: ", sum_all)
 
@@ -308,20 +308,20 @@ predictions = model.predict(X)
 plt.plot(predictions)
 plt.show()
 print(model.summary())
-print(model.summary().as_latex())
+#print(model.summary().as_latex())
 
 
-# In[70]:
+# In[11]:
 
 
 # The measurement originates from February 2018
 with open('./sloc_report.txt') as f:
     content = f.readlines()
     for i in content:
-        (total, ansic, cpp, asm, java, python, perl, sh) = (0, 0, 0, 0, 0, 0, 0, 0)
+        (total_slocs, ansic, cpp, asm, java, python, perl, sh) = (0, 0, 0, 0, 0, 0, 0, 0)
         words=i.split()
         try:
-            total = int(words[0])
+            total_slocs = int(words[0])
             pkg = words[1]
             for w in words[2:]:
                 ww = re.split('=|,',w)
@@ -339,7 +339,7 @@ with open('./sloc_report.txt') as f:
                     perl = int(ww[1])
                 if ww[0] == 'sh':
                     sh = int(ww[1])    
-            src2sloccount[pkg] = (total, [ansic, cpp, asm, java, python, perl, sh])
+            src2sloccount[pkg] = (total_slocs, [ansic, cpp, asm, java, python, perl, sh])
         except:
             print(words)
 
@@ -385,7 +385,7 @@ for k in keys:
         i = 0
         
 print('package number =' + str(len(values)) + '... ' + str(len(keys)))
-carlosplt.pre_paper_plot(True)
+#carlosplt.pre_paper_plot(True)
 #plt.style.use('ggplot')
 
 print('Spearman correlation: ',stats.spearmanr(values,size))
@@ -403,11 +403,11 @@ plt.grid()
 #plt.xscale('log')
 plt.tight_layout()
 plt.legend()
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 plt.show()
 
 
-# In[57]:
+# In[12]:
 
 
 ## Build and print probability distribution, bins per 10
@@ -467,7 +467,7 @@ R, p=results.distribution_compare('power_law','lognormal')
 print('Lognormal: ',R,p)
 
 
-# In[12]:
+# In[13]:
 
 
 ## Number of affected packages
@@ -485,7 +485,7 @@ plt.bar(x, year_num[1:], width, color='darkblue', edgecolor='black')
 plt.xticks(np.arange(0,n),yearsx)
 plt.ylabel('Number of affected packages')
 plt.xlabel('Year')
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 plt.show()
 
 average_per_year = [0] * (years+1)
@@ -507,7 +507,7 @@ plt.bar(x, average_per_year[1:], width, color='darkblue', edgecolor='black')
 plt.xticks(np.arange(0,n),yearsx)
 plt.ylabel('Average vulnerabilities per package')
 plt.xlabel('Year')
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 ## Linear regression
 X = sm.add_constant(x)
 y = average_per_year[1:]
@@ -516,10 +516,10 @@ predictions = model.predict(X)
 plt.plot(predictions)
 plt.show()
 print(model.summary())
-print(model.summary().as_latex())
+#print(model.summary().as_latex())
 
 
-# In[13]:
+# In[14]:
 
 
 quarter_num = years*4
@@ -640,7 +640,7 @@ plt.bar(x, LTS_quarter, width, color='brown', label='regular support', edgecolor
 plt.xticks(np.arange(0,n),quartersx, rotation="vertical")
 plt.ylabel('Vulnerabilities per quarter of Debian LTS')
 plt.xlabel('Quarter')
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 plt.show()
     
 ## Filter only wheezy:
@@ -665,7 +665,7 @@ plt.legend(handles=[bar1, bar12, bar2])
 plt.xticks(np.arange(0,n),quartersx[cut:], rotation="vertical")
 plt.ylabel('Vulnerabilities per quarter')
 plt.xlabel('Quarter')
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 ## Linear Regression
 print(len(x))
 print(len(whole_w[cut:]))
@@ -676,10 +676,10 @@ predictions = model.predict(X)
 plt.plot(predictions)
 plt.show()
 print(model.summary())
-print(model.summary().as_latex())
+#print(model.summary().as_latex())
 
 
-# In[14]:
+# In[ ]:
 
 
 ## Plot for wheezy ONLY HIGH severity
@@ -737,7 +737,7 @@ plt.bar(x, LTS_quarter, width, color='brown', label='regular support', edgecolor
 plt.xticks(np.arange(0,n),quartersx, rotation="vertical")
 plt.ylabel('Vulnerabilities per quarter of Debian LTS')
 plt.xlabel('Quarter')
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 plt.show()
     
 ## Filter only wheezy:
@@ -762,7 +762,7 @@ plt.legend(handles=[bar1, bar12, bar2])
 plt.xticks(np.arange(0,n),quartersx[cut:], rotation="vertical")
 plt.ylabel('Vulnerabilities per quarter')
 plt.xlabel('Quarter')
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 ## Linear Regression
 print(len(x))
 print(len(whole_w[cut:]))
@@ -773,10 +773,10 @@ predictions = model.predict(X)
 plt.plot(predictions)
 plt.show()
 print(model.summary())
-print(model.summary().as_latex())
+#print(model.summary().as_latex())
 
 
-# In[124]:
+# In[ ]:
 
 
 # Now we will plot types
@@ -864,7 +864,7 @@ for cve in cve_once_dla:
         root2month_DLA[root][(year-2000)*12+month-1]+=1
 
 
-# In[139]:
+# In[ ]:
 
 
 percent = []
