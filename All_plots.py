@@ -679,7 +679,7 @@ print(model.summary())
 #print(model.summary().as_latex())
 
 
-# In[ ]:
+# In[15]:
 
 
 ## Plot for wheezy ONLY HIGH severity
@@ -776,7 +776,7 @@ print(model.summary())
 #print(model.summary().as_latex())
 
 
-# In[ ]:
+# In[16]:
 
 
 # Now we will plot types
@@ -864,7 +864,7 @@ for cve in cve_once_dla:
         root2month_DLA[root][(year-2000)*12+month-1]+=1
 
 
-# In[ ]:
+# In[17]:
 
 
 percent = []
@@ -970,6 +970,5 @@ for j in [1, 4, 6, 11]:
     except IndexError:
         plt.ylabel('N/A')
         plt.xlabel('Quarter')
-#carlosplt.post_paper_plot(True,True,True)
+carlosplt.post_paper_plot(True,True,True)
 plt.show()
-

@@ -14,7 +14,6 @@ import operator
 from dateutil import parser
 import seaborn as sns
 from matplotlib.font_manager import FontProperties
-#import paper_plots as carlosplt
 
 
 # In[2]:
@@ -93,7 +92,7 @@ print(dictlist)
 print(dictlist.sort(reverse=True))
 print(dictlist)
 plt.plot(dictlist)
-
+plt.show()
 
 # In[6]:
 
@@ -107,7 +106,7 @@ print(dictlist)
 print(dictlist.sort(reverse=True))
 print(dictlist)
 plt.plot(dictlist)
-
+plt.show()
 
 # In[7]:
 
@@ -175,7 +174,7 @@ print(ibb_rep2month)
 # In[19]:
 
 
-#carlosplt.pre_paper_plot(True)
+carlosplt.pre_paper_plot(True)
 quartersx = []
 for i in range(14,14+years):
     for j in range(1,5):
@@ -218,34 +217,113 @@ n = len(ibb_rep2quart)
 x = range(len(ibb_rep2quart))
 width = 1/2
 pal = sns.color_palette("Paired", 12)
+fig = plt.figure()
 
+ax = fig.add_subplot(1,2,1)            
 ## Create bars plot
-h = plt.stackplot(x, [ibb_bounty2quart, rest_bounty2quart], colors=pal, alpha=0.9, labels = ['in IBB','rest'])
+h = plt.stackplot(x, [ibb_bounty2quart, rest_bounty2quart], colors=pal, alpha=0.9)
 plt.xticks(np.arange(0,n),quartersx, rotation="vertical")
-labeltext='Bounty amount ratio'
+labeltext='Amount ratio'
 fontP = FontProperties()
 fontP.set_size('small')
-plt.legend(loc='upper left', handles = h[::-1], prop=fontP)
 
 plt.ylabel(labeltext)
 plt.xlabel('Quarter')
-plt.tight_layout()
-plt.plot()
-#carlosplt.post_paper_plot(True,True,True)
+#plt.tight_layout()
+carlosplt.post_paper_plot(True,True,True)
+#plt.show()
 
 
 # In[20]:
 
 
+ax = fig.add_subplot(1,2,2)            
 ## Create bars plot
 h = plt.stackplot(x, [ibb_rep2quart, rest_rep2quart], colors=pal, alpha=0.9, labels = ['in IBB','rest'])
 plt.xticks(np.arange(0,n),quartersx, rotation="vertical")
-labeltext='Report number ratio'
+labeltext='Reports ratio'
+plt.ylabel(labeltext)
+plt.xlabel('Quarter')
+fontP = FontProperties()
+fontP.set_size('small')
+plt.legend(loc='upper right', handles = h[::-1], prop=fontP)
+#plt.tight_layout()
+plt.show()
+carlosplt.post_paper_plot(True,True,True)
+
+carlosplt.pre_paper_plot(True)
+quartersx = []
+for i in range(14,14+years):
+    for j in range(1,5):
+        if j==1:
+            quartersx.append('Q' + str(j)+'\''+str(i).zfill(2))
+        else:
+            quartersx.append(' ')
+
+ibb_rep2quart = []
+rest_rep2quart = []
+ibb_bounty2quart = []
+rest_bounty2quart = []
+
+quarter_num= len(quartersx)            
+for j in range(quarter_num):
+    temp1=sum(ibb_rep2month[3*j:3*(j+1)])
+    temp2=sum(ibb_bounty2month[3*j:3*(j+1)])
+    temp3=sum(rest_rep2month[3*j:3*(j+1)])
+    temp4=sum(rest_bounty2month[3*j:3*(j+1)])
+    
+    try:
+        temp_rep_ibb=temp1
+        temp_rep_rest=temp3
+    except ZeroDivisionError:
+        temp_rep_ibb=0
+        temp_rep_rest=0
+    try:
+        temp_bounty_ibb=temp2/1000
+        temp_bounty_rest=temp4/1000
+    except ZeroDivisionError:
+        temp_bounty_ibb=0
+        temp_bounty_rest=0
+    
+    ibb_rep2quart.append(temp_rep_ibb)
+    ibb_bounty2quart.append(temp_bounty_ibb)
+    rest_rep2quart.append(temp_rep_rest)
+    rest_bounty2quart.append(temp_bounty_rest)
+    
+n = len(ibb_rep2quart)
+x = range(len(ibb_rep2quart))
+width = 1/2
+pal = sns.color_palette("Paired", 12)
+fig = plt.figure()
+
+ax = fig.add_subplot(1,2,1)            
+## Create bars plot
+h = plt.stackplot(x, [ibb_bounty2quart, rest_bounty2quart], colors=pal, alpha=0.9)
+plt.xticks(np.arange(0,n),quartersx, rotation="vertical")
+labeltext='Bounty amount (k)'
+fontP = FontProperties()
+fontP.set_size('small')
+
+plt.ylabel(labeltext)
+plt.xlabel('Quarter')
+#plt.tight_layout()
+carlosplt.post_paper_plot(True,True,True)
+#plt.show()
+
+
+# In[20]:
+
+
+ax = fig.add_subplot(1,2,2)            
+## Create bars plot
+h = plt.stackplot(x, [ibb_rep2quart, rest_rep2quart], colors=pal, alpha=0.9, labels = ['in IBB','rest'])
+plt.xticks(np.arange(0,n),quartersx, rotation="vertical")
+labeltext='Report number'
 plt.ylabel(labeltext)
 plt.xlabel('Quarter')
 fontP = FontProperties()
 fontP.set_size('small')
 plt.legend(loc='upper left', handles = h[::-1], prop=fontP)
-plt.tight_layout()
-#carlosplt.post_paper_plot(True,True,True)
-
+#plt.tight_layout()
+carlosplt.post_paper_plot(True,True,True)
+plt.show()
