@@ -17,6 +17,22 @@ class Mydata:
 
 
 def main():
+    client = MongoClient('mongodb://localhost:27017/')
+    db = client.cvedb
+    
+    # Get the collection object
+    # Here name of the database is "states"
+    
+    collection  = db.cves
+    
+    # Make a query to list all the documents
+    
+    cvedicttemp=collection.find()
+    
+    cvedict=dict()
+    for key in cvedicttemp:
+        cvedict[key['id']]=key
+    
     vlist = []
     carlosplt.pre_paper_plot() 
     fig = plt.figure()    
@@ -68,36 +84,48 @@ class calc_laplace:
         self.laplace_process_list(new_vlist[12*year_start+6:], 'openjdk-7', year_start)
 
     def laplace_wheezy(self, vlist, high):
-        (dsatable, src2dsa, dsa2cve, cvetable, src2month, src2sloccount, src2pop, src2deps, pkg_with_cvss, src2cwe) = load_DBs()
-        print(len(src2month['linux']))
-        if not high:
-            with open("DLA_src2month.json", "r") as fp:
-                dlas = json.load(fp)
-        else:
-            src2month = pkg_with_cvss
-            with open("DLA_withcvss.json", "r") as fp:
-                dlas = json.load(fp)
+        
+        with open('./vendors/debian/cve_once.json') as fp:
+            cve_once=json.load(fp)
 
-        total = [0]*len(src2month['linux'])
-        for pkg in src2month:
-            for month in range(len(src2month[pkg])):
-                if high:
-                    total[month] += src2month[pkg][month][2]
-                else:
-                    total[month] += src2month[pkg][month]
-
-        total_dla = [0]*(len(dlas['linux'])*12)
+        with open('./vendors/debian/cve_once_dla.json') as fp:
+            cve_once_dla=json.load(fp)
+        
+         with open('./vendors/debian/src2dsa.json') as fp:
+            cve_once_dla=json.load(fp)
+        
+        
+        # Years
+        total=19
+        
+        total_dsa=[0]*years*12
+        total_dla=[0]*years*12
+        
+        for cve in cve_once:
+            date = datetime.datetime.strptime(cve_once[cve], '%Y-%m-%d %H:%M:%S')
+            year = date.year
+            month = date.month
+            
+            if high:
+                if cvedict[cve]<7:
+                    continue
+            
+            total_dsa[(year-2000)*12+month]
+            
+        for cve in cve_once_dla:
+            date = datetime.datetime.strptime(cve_once[cve], '%Y-%m-%d %H:%M:%S')
+            year = date.year
+            month = date.month
+            
+            if high:
+                if cvedict[cve]<7:
+                    continue
+            
+            total_dsa[(year-2000)*12+month]
+            
+        print(total_dsa)
         print(total_dla)
-        for pkg in dlas:
-            for year in range(len(dlas[pkg])):
-                for month in range(len(dlas[pkg][year])):
-                    if high:
-                        total_dla[year*12+month] += dlas[pkg][year][month][2]
-                    else:
-                        total_dla[year*12+month] += dlas[pkg][year][month]
-        print(total)
-        print(total_dla)
-        dsa_wheezy = total[12*13 + 4: 12*16 + 3]
+        dsa_wheezy = total_dsa[12*13 + 4: 12*16 + 3]
         dla_wheezy = total_dla[-12*3 + 4:-7]
         print(len(dsa_wheezy))
         print(len(dla_wheezy))
