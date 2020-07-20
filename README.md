@@ -4,8 +4,9 @@ The Debian Vulnerability Analysis Framework offers tools to gather and analyze v
 
 ## First Step -- Update database
 - The [cve-search](https://github.com/cve-search/cve-search) tool is required and assumed updated and executed with the default database location.
-- Execute ./dvaf.py update (make sure dvaf.py is executable)
+- Execute $ ./dvaf.py update (make sure dvaf.py is executable) to fetch and pre-process the DSAs.
+- Execute $ python3 ./vendors/debian/DLAmine.py to fetch and pre-process the DLAs.
 
 ## Second Step -- Plot
-- Execute $python3 main.py
+- Execute $python3 All_plots.py .
 - With a little bit of luck, you will see a lot of interesting plots.
