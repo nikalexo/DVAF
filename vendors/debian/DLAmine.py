@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from DebiaAdvisory import DebianAdvisory as da
+from DebianAdvisory import DebianAdvisory as da
 from CVEParse import CVEParse as cveparse
 import re
 import datetime
