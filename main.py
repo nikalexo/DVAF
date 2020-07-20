@@ -19,7 +19,7 @@ def main():
     # 2000-2018
     
     j = TypePlotter(data, years)
-    #j.plot_types()
+    j.plot_types()
 
     sum_linux = 0
     for num in data.src2month['linux'][:-12]:

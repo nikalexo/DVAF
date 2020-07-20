@@ -346,8 +346,11 @@ with open('./sloc_report.txt') as f:
 
 
 src2sum_g2=dict()
+
+# To plot only packages with >1 vulnerabilities
+
 for src in src2sum:
-    if src2sum[src]>1:
+    if src2sum[src]>0:
         src2sum_g2[src]=src2sum[src]
 values = sorted(src2sum_g2.values(),reverse=True)
 #print(values)
@@ -377,11 +380,13 @@ for pkg in keys:
     j += 1
 i = 0
 few_keys = []
+jump = 20
+
 for k in keys:
     if (i==0):
         few_keys.append(k)
     i+=1
-    if (i==10):
+    if (i==jump):
         i = 0
         
 print('package number =' + str(len(values)) + '... ' + str(len(keys)))
@@ -396,7 +401,7 @@ with open('sizes.txt', 'w') as thefile:
 plt.figure(figsize=(10,5))
 plt.plot(values, color='darkblue', lw = 2)
 plt.plot(size, 'ro', color='darkred', lw = 2, label='Size in KSLoC')
-plt.xticks(np.arange(0,len(src2sum_g2),10.0),few_keys, rotation="vertical")
+plt.xticks(np.arange(0,len(src2sum_g2),float(jump)),few_keys, rotation="vertical")
 plt.ylabel('Vulnerabilities')
 plt.yscale('log')
 plt.grid()
@@ -970,5 +975,5 @@ for j in [1, 4, 6, 11]:
     except IndexError:
         plt.ylabel('N/A')
         plt.xlabel('Quarter')
-carlosplt.post_paper_plot(True,True,True)
+#carlosplt.post_paper_plot(True,True,True)
 plt.show()

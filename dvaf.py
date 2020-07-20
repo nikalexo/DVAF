@@ -35,7 +35,7 @@ def __main__(configfile='config_default.txt', vendorname='debian', action='help'
 
 
     else:
-        print("Only debian vendors are supported for now.")
+        print("Only Debian is supported for now.")
         sys.exit(1)
 
 __main__(action=sys.argv[1])

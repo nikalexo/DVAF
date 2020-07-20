@@ -41,7 +41,9 @@ class Plotter:
                     if xx==19:
                         continue
                     else:
-                        raise IndexError('List index out of bounds')
+                        print(xx)
+                        #raise IndexError('List index out of bounds')
+                    
         ## Generate percentage
         for i in range(self.years + 1):
             try:

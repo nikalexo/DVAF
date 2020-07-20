@@ -402,8 +402,8 @@ if __name__ == "__main__":
     carlosplt.pre_paper_plot()
     for i in range(4):
         ax = fig.add_subplot(2,2,i+1)
-        #plot_bounties(i)
-        plot_demographics(i)
+        plot_bounties(i)
+        #plot_demographics(i)
 
     #plot_bounties(1)
     plt.show()

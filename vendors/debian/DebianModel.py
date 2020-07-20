@@ -15,7 +15,7 @@ from fixcwes import ret_roots
 
 class DebianModel(VendorModel):
     """
-    This class represents M-Star debian module. It is responsible for handling debian package infos.
+    This class represents the DVAF Debian module. It is responsible for handling debian package infos.
     """
     module_path = os.path.dirname(__file__)
 
@@ -393,7 +393,7 @@ class DebianModel(VendorModel):
 
         items.sort(key=lambda tup: tup[0])
 
-        for i in range(2000,2020):
+        for i in range(2000,2021):
             temp = []
             for j in range(12):
                 temp.append([0]*12)
@@ -434,7 +434,7 @@ class DebianModel(VendorModel):
 
         items.sort(key=lambda tup: tup[0])
 
-        for i in range(2000, 2020):
+        for i in range(2000, 2021):
             temp = []
             for j in range(12):
                 if cvss:

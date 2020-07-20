@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-from DebianAdvisory import DebianAdvisory as da
+from DebiaAdvisory import DebianAdvisory as da
 from CVEParse import CVEParse as cveparse
 import re
 import datetime
@@ -30,7 +30,7 @@ def getDLAs():
     i = 0
     j = 0
 
-    for year in range(2014,2020):
+    for year in range(2014,2021):
         for month in range(1,13):
             totalDLAs[str(year) + ',' + str(month)] = []
             i = 0

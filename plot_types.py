@@ -27,7 +27,7 @@ class TypePlotter:
             src2cwe_sum.append([0]*12)
         
         for pkg in self.src2cwe:
-            for i in range(len(self.src2cwe[pkg])):
+            for i in range(len(self.src2cwe[pkg][:12*self.years])):
                 for j in range(len(self.src2cwe[pkg][i])):
                     src2cwe_sum[i][j] += self.src2cwe[pkg][i][j]
 
