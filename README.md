@@ -9,4 +9,4 @@ The Debian Vulnerability Analysis Framework offers tools to gather and analyze v
 
 ## Second Step -- Plot
 - Execute $python3 All_plots.py .
-- With a little bit of luck, you will see a lot of interesting plots.
+- With a little bit of luck, you will see a lot of interesting plots. (The current implementation is a bit memory-hungry)
