@@ -95,6 +95,7 @@ class DebianModel(VendorModel):
         Currently reading it from files in the cache folder.
         """
         self.dsatable = self.load_single_db_from_cache('dsatable')
+        self.dsainfo = self.load_single_db_from_cache('dsainfo')
         self.src2dsa = self.load_single_db_from_cache('src2dsa')
         self.dsa2cve = self.load_single_db_from_cache('dsa2cve')
         self.cvetable = self.load_single_db_from_cache('cvetable')
